@@ -1,6 +1,7 @@
 import 'dart:async';
+import 'package:flutter/services.dart';
 import 'dart:convert';
-
+import 'globals.dart' as globals;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'pages/login.dart';
@@ -41,11 +42,14 @@ class Album {
 }
 
 void main() {
+   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(MaterialApp(
     title: 'My App',
     home: LoginPage(),
   ));
 }
+
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
