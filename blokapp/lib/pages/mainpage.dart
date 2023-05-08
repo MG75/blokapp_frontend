@@ -12,14 +12,14 @@ import '/pages/settings.dart';
 
 
 
-class MainPage extends StatefulWidget {
-  const MainPage({super.key});
+class HomaPage extends StatefulWidget {
+  const HomaPage({super.key});
 
   @override
-  State<MainPage> createState() => _MainPageState();
+  State<HomaPage> createState() => _HomaPageState();
 }
 
-class _MainPageState extends State<MainPage> {
+class _HomaPageState extends State<HomaPage> {
   @override
   void initState() {
     super.initState();
@@ -33,7 +33,7 @@ class _MainPageState extends State<MainPage> {
           children: <Widget>[
             Expanded(
               child: Text(
-                'Blokapp',
+                'Home',
                 textAlign: TextAlign.left,
               ),
             ),

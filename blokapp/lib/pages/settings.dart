@@ -1,9 +1,12 @@
 import 'dart:async';
+import 'package:blokapp/pages/login.dart';
 import 'package:flutter/services.dart';
 import 'dart:convert';
 import '/globals.dart' as globals;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import '/storage.dart';
+import 'login.dart';
 
 class settings extends StatefulWidget {
   const settings({super.key});
@@ -18,14 +21,23 @@ final _connectionPasswordcontroller = TextEditingController();
 String povezava = globals.povezava;
 
 void save() {
-  // You can add your logic to save the form data here
   globals.povezava = _connectionPasswordcontroller.text;
   povezava = globals.povezava;
 }
 
-void saveuser(){}
+void saveuser() {}
 
-void logout(){}
+void logout(BuildContext context) {
+  globals.isLoggedIn = false;
+  storage.delete(key: 'LoginToken');
+  globals.username = '';
+  globals.UserID = null;
+  globals.blok = null;
+  Navigator.pushReplacement(
+    context,
+    MaterialPageRoute(builder: (context) => LoginPage()),
+  );
+}
 
 class _settingsState extends State<settings> {
   @override
@@ -83,7 +95,7 @@ class _settingsState extends State<settings> {
                   Expanded(
                     child: ElevatedButton(
                       child: Text('Logout'),
-                      onPressed: logout,
+                      onPressed: () => logout(context),
                     ),
                   ),
                 ],

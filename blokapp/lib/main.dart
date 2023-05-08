@@ -43,7 +43,7 @@ void main() async {
         runApp(
           MaterialApp(
             title: 'Blokapp',
-            home: MainPage(),
+            home: HomaPage(),
           ),
         );
         return;
@@ -86,14 +86,14 @@ class _MyAppState extends State<MyApp> {
                 textAlign: TextAlign.left,
               ),
             ),
-            TextButton(
+            IconButton(
               onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => settings()),
                 );
               },
-              child: Icon(Icons.settings),
+              icon: Icon(Icons.settings),
             ),
           ],
         ),
