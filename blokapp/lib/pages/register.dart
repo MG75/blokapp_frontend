@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '/main.dart';
 import 'dart:convert';
+import 'package:jwt_decoder/jwt_decoder.dart';
+import '/storage.dart';
 import 'settings.dart';
 import '/globals.dart' as globals;
 
@@ -24,11 +26,22 @@ void register(BuildContext context, String name, String mail, String password,
         body: jsonData, headers: {'Content-Type': 'application/json'});
 
     if (response.statusCode == 200) {
-      print('Data sent successfully');
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => MyApp()),
-      );
+      final Map<String, dynamic> responseData = jsonDecode(response.body);
+      final String token = responseData['token'];
+
+      if (token != null) {
+        final Map<String, dynamic> LoginToken = JwtDecoder.decode(token);
+        await storage.write(key: 'LoginToken', value: token);
+        print(LoginToken);
+        globals.isLoggedIn = true;
+        globals.UserID = LoginToken['id'];
+        globals.username = LoginToken['username'];
+        globals.blok = LoginToken['blok'];
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => MyApp()),
+        );
+      } else {}
     } else {
       print('Failed to send data. Status code: ${response.statusCode}');
     }
@@ -99,15 +112,14 @@ class _RegisterPageState extends State<RegisterPage> {
                 textAlign: TextAlign.left,
               ),
             ),
-            TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => settings()),
-                );
-              },
-              child: const Icon(Icons.settings),
-            ),
+            IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => settings()),
+                  );
+                },
+                icon: Icon(Icons.settings)),
           ],
         ),
       ),

@@ -23,9 +23,14 @@ void save() {
   povezava = globals.povezava;
 }
 
+void saveuser(){}
+
+void logout(){}
+
 class _settingsState extends State<settings> {
   @override
   Widget build(BuildContext context) {
+    print(globals.isLoggedIn);
     if (globals.isLoggedIn) {
       return Scaffold(
         appBar: AppBar(
@@ -65,6 +70,23 @@ class _settingsState extends State<settings> {
                   }
                   return null;
                 },
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      child: Text('Update user info'),
+                      onPressed: saveuser,
+                    ),
+                  ),
+                  Expanded(
+                    child: ElevatedButton(
+                      child: Text('Logout'),
+                      onPressed: logout,
+                    ),
+                  ),
+                ],
               ),
               SizedBox(height: 20),
               TextFormField(
