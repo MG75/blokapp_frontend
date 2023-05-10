@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'pages/login.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'pages/mainpage.dart';
 import 'pages/settings.dart';
 
@@ -31,7 +32,6 @@ void main() async {
             'http://$povezava:3000/users/validate-LoginToken'), // Replace with your server endpoint
         headers: {'authorization': 'Bearer $KeyToken'},
       );
-
       if (response.statusCode == 200) {
         print('valid');
         globals.isLoggedIn = true;
@@ -49,6 +49,12 @@ void main() async {
         return;
       }
     } catch (e) {
+      runApp(
+          MaterialApp(
+            title: 'Blokapp',
+            home: HomaPage(),
+          ),
+        );
       print('no connection $e');
     }
   }
@@ -77,28 +83,6 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          children: <Widget>[
-            Expanded(
-              child: Text(
-                'Blokapp',
-                textAlign: TextAlign.left,
-              ),
-            ),
-            IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => settings()),
-                );
-              },
-              icon: Icon(Icons.settings),
-            ),
-          ],
-        ),
-      ),
-      body: Center(child: Text('globals.username')),
     );
   }
 }

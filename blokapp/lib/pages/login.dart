@@ -7,6 +7,7 @@ import 'register.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'dart:convert';
 import 'settings.dart';
+import 'mainpage.dart';
 import '/globals.dart' as globals;
 
 void login(BuildContext context, String mail, String password) async {
@@ -37,7 +38,7 @@ void login(BuildContext context, String mail, String password) async {
           globals.blok = LoginToken['blok'];
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => MyApp()),
+            MaterialPageRoute(builder: (context) => HomaPage()),
           );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(

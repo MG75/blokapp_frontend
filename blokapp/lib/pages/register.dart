@@ -1,4 +1,5 @@
 import 'dart:ffi';
+import 'package:blokapp/pages/mainpage.dart';
 import 'login.dart';
 import 'package:blokapp/pages/login.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +40,7 @@ void register(BuildContext context, String name, String mail, String password,
         globals.blok = LoginToken['blok'];
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => MyApp()),
+          MaterialPageRoute(builder: (context) => HomaPage()),
         );
       } else {}
     } else {
