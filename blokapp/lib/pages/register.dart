@@ -212,10 +212,6 @@ class _RegisterPageState extends State<RegisterPage> {
                               _passwordController.text,
                               _selectedValue,
                             );
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(builder: (context) => MyApp()),
-                            );
                           }
                         : null,
                     child: Text('Register'),
