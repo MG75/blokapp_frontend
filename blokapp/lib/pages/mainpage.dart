@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:blokapp/pages/newPost.dart';
 import 'package:flutter/services.dart';
 import 'dart:convert';
 import 'package:jwt_decoder/jwt_decoder.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '/pages/login.dart';
+import '/pages/newPost.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart' as refresh;
 import 'post.dart';
 import '/pages/settings.dart';
@@ -36,22 +38,30 @@ class _HomaPageState extends State<HomaPage> {
     int? buildingId = globals.blok;
     print(globals.blok);
     print(buildingId);
-    final response = await http
-        .get(Uri.parse('http://$povezava:3000/posts/display/$buildingId'));
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      setState(
-        () {
-          {
-            final List<dynamic> responseBody = json.decode(response.body);
-            final List<Map<String, dynamic>> post = responseBody
-                .map((post) => Map<String, dynamic>.from(post))
-                .toList();
-            posts = responseBody
-                .map((post) => Map<String, dynamic>.from(post))
-                .toList();
-          }
-        },
+    try {
+      final response = await http
+          .get(Uri.parse('http://$povezava:3000/posts/display/$buildingId'));
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        setState(
+          () {
+            {
+              final List<dynamic> responseBody = json.decode(response.body);
+              final List<Map<String, dynamic>> post = responseBody
+                  .map((post) => Map<String, dynamic>.from(post))
+                  .toList();
+              posts = responseBody
+                  .map((post) => Map<String, dynamic>.from(post))
+                  .toList();
+            }
+          },
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('No internet connection'),
+        ),
       );
     }
     _refreshController.refreshCompleted();
@@ -137,9 +147,23 @@ class _HomaPageState extends State<HomaPage> {
         child: buildListView(),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => setState(
-          () {},
-        ),
+        onPressed: () {
+          Navigator.of(context)
+              .push(MaterialPageRoute(
+            builder: (context) => newPost(),
+          ))
+              .then(
+            (value) {
+              // Refresh the main page when the secondary page closes
+              if (value != null && value) {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomaPage()),
+                );
+              }
+            },
+          );
+        },
         child: const Icon(Icons.add),
       ),
     );
