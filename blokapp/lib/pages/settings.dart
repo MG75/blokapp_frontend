@@ -15,17 +15,38 @@ class settings extends StatefulWidget {
   State<settings> createState() => _settingsState();
 }
 
+
 final _nameController = TextEditingController();
 final _passwordController = TextEditingController();
 final _connectionPasswordcontroller = TextEditingController();
 String povezava = globals.povezava;
+
+
 
 void save() {
   globals.povezava = _connectionPasswordcontroller.text;
   povezava = globals.povezava;
 }
 
-void saveuser() {}
+void saveuser() async {
+  final povezava = globals.povezava;
+  final uid = globals.UserID;
+  globals.username = _nameController.text;
+  try {
+    final String apiUrl = 'http://$povezava:3000/users/update';
+    final Map<String, dynamic> payload = {
+      'name_surname': _nameController.text,
+      'uid': uid,
+      'password': _passwordController.text,
+    };
+    final String jsonData = jsonEncode(payload);
+    print(jsonData);
+    final response = await http.post(Uri.parse(apiUrl),
+        body: jsonData, headers: {'Content-Type': 'application/json'});
+  } catch (e) {
+    print('nope $e');
+  }
+}
 
 void logout(BuildContext context) {
   globals.isLoggedIn = false;
@@ -39,7 +60,15 @@ void logout(BuildContext context) {
   );
 }
 
+
+
 class _settingsState extends State<settings> {
+
+   @override
+  void initState() {
+    super.initState();
+    _nameController.text = globals.username;
+  }
   @override
   Widget build(BuildContext context) {
     print(globals.isLoggedIn);

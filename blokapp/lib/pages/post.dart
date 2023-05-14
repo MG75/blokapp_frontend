@@ -80,13 +80,26 @@ class _PostState extends State<Post> {
   bool scoreRecorded = false;
   int? value;
   int? vid;
+  String postuser = '';
 
   Future<void> VoteData(int pid, int uid) async {
+    int? cid = globals.UserID;
+    print('cid. $cid');
+    print('pid: $pid');
     final povezava = globals.povezava;
-    print('http://$povezava:3000/vote/get/$uid/$pid');
+    
     try {
+      final respie = await http .get(Uri.parse('http://$povezava:3000/votes/getusername/$uid'));
+      if (respie.statusCode == 200) {
+        setState(() {
+          var respiBody = json.decode(respie.body);
+          postuser = respiBody['name_surname'];
+        });
+      } else {
+        print('Error retrieving options from API');
+      }
       final response = await http
-          .get(Uri.parse('http://$povezava:3000/votes/get/$uid/$pid'));
+          .get(Uri.parse('http://$povezava:3000/votes/get/$cid/$pid'));
       print(response.statusCode);
       if (response.statusCode == 200) {
         setState(() {
@@ -198,6 +211,10 @@ class _PostState extends State<Post> {
               ),
               Text(
                 widget.selectedPost['description'],
+                style: TextStyle(fontSize: 20),
+              ),
+              Text(
+                'Objavil: $postuser',
                 style: TextStyle(fontSize: 20),
               ),
             ],
